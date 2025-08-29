@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors')
 const helmet = require("helmet");
 const morgan = require("morgan");
-const {connectMongoDB} = require('./config/db')
+const connectMongoDB = require('./config/db')
 const authRoutes = require('./routes/auth')
 
 //DB
@@ -29,5 +29,5 @@ app.use(morgan("dev"));
 app.use('/api/auth', authRoutes);
 
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

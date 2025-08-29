@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const User = require('../models/User')
-const {sendEmail} = require('../utils/sendEmail')
+const sendEmail = require('../utils/sendEmail')
 const {generateAccessToken, generateRefreshToken} = require('../utils/jwt')
 
 const generateOTP = () => {
@@ -65,6 +65,7 @@ async function handleVerifyOTP(req,res) {
         user.isVerified = true;
         user.otp = undefined;
         user.otpExpiry = undefined;
+        await user.save();
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
@@ -212,7 +213,7 @@ async function handleRefreshToken(req,res) {
         const refreshToken = req.cookies.refreshToken;
         if(!refreshToken) return res.staus(401).json({msg:"Refresh Token Missing"});
 
-        const payload = jwt.verify(refreshToken,process.env.ACCESS_TOKEN_SECRET);
+        const payload = jwt.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET);
 
         const user = await User.findById(payload.id);
         if(!user || !user.refreshTokens.includes(refreshToken)){
