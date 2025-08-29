@@ -6,6 +6,8 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const connectMongoDB = require('./config/db')
 const authRoutes = require('./routes/auth')
+const resumeRoutes = require('./routes/resumeRoutes')
+
 
 //DB
 const app = express();
@@ -27,6 +29,7 @@ app.use(morgan("dev"));
 
 //Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/resume', resumeRoutes);
 
 
 const PORT = process.env.PORT;

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const ResumeSchema = new mongoose.Schema({
-  user:          { type: String, required: true }, // manual userId instead of ObjectId
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   originalName:  { type: String },
   cloudinaryUrl: { type: String },
   cloudinaryId:  { type: String },
