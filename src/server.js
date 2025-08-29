@@ -9,7 +9,7 @@ const authRoutes = require('./routes/auth')
 
 //DB
 const app = express();
-connectDB();
+connectMongoDB();
 
 
 //Middlewares

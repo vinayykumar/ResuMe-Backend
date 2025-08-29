@@ -1,9 +1,21 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
-    name : { type : String},
-    email : { type : String, required : true, unique : true, lowercase : true, trim : true},
-    password : { type : String, require : true},
-    createdAt : { type : Date, default : Date.now }
-});
+    userId : { type: String, required: true, unique: true},
+
+    username : { type: String, required: true, trim: true},
+    email : {type: String, required: true, unique: true, lowercase: true, index: true},
+    password: { type: String, required: true },
+
+    otp: { type: String },
+    otpExpiry: { type: Date },
+
+    refreshTokens : [String],
+
+    resetPasswordToken:   { type: String },
+    resetPasswordExpires: { type: Date },
+    
+    lastLogin: { type: Date }
+}, { timestamps: true });
+
+module.exports = mongoose.model('User',userSchema);
