@@ -1,44 +1,40 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 async function analyzeResume(resumeText, jobTitle, jobDescription) {
   const prompt = `
-You are an AI resume analyzer. Compare this resume with the given job description.
+  You are an AI resume analyzer. Compare this resume with the given job description.
 
-Job Title: ${jobTitle}
-Job Description: ${jobDescription}
+  Job Title: ${jobTitle}
+  Job Description: ${jobDescription}
 
-Resume Text:
-${resumeText}
+  Resume Text:
+  ${resumeText}
 
-Return ONLY valid JSON in this exact format:
-
-{
-  "aiScore": number, 
-  "aiFeedback": {
-    "Strengths_Resume": [ "string", "string" ],
-    "Weakness_Resume": [ "string", "string" ]
-  },
-  "keywords": [ "string", "string" ]
-}
-`;
-
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
-
-  // Try parsing safely
-  let parsed;
-  try {
-    parsed = JSON.parse(text);
-  } catch (err) {
-    console.error("AI JSON parse error:", err, text);
-    throw new Error("Failed to parse AI response");
+  Return these in the response and strictly follow this JSON Format, dont add any spacing or special characters
+  {
+    "aiScore": number, 
+    "aiFeedback": {
+      "Strengths_Resume": [ "string", "string" ],
+      "Weakness_Resume": [ "string", "string" ]
+    },
+    "keywords": [ "string", "string" ]
   }
+  `;
 
-  return parsed;
+  let text;
+  try {
+    const result = await model.generateContent(prompt);
+    const rawText = response.aiResponse.response.candidates[0].content.parts[0].text;
+    return JSON.parse(rawText);
+
+  } catch (err) {
+    console.error("Final AI error:", err);
+    throw new Error("AI Resume Analysis failed");
+  }
 }
 
 module.exports = { analyzeResume };

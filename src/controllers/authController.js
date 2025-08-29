@@ -4,6 +4,14 @@ const User = require('../models/User')
 const sendEmail = require('../utils/sendEmail')
 const {generateAccessToken, generateRefreshToken} = require('../utils/jwt')
 
+
+// const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+
+
+
 const generateOTP = () => {
     return Math.floor(100000 + Math.random()*900000).toString();
 }
@@ -143,6 +151,10 @@ async function handleForgotPassword(req,res) {
 
 async function handleLoginUser(req,res) {
     try{
+        // const prompt = "Give a short story of turtle and rabbit in simple plain text only";
+        // const result = await model.generateContent(prompt);
+        // return res.json({result});
+
         const {email, password} = req.body;
         if(!email || !password) return res.status(400).json({msg:"Email and Password in required"})
         

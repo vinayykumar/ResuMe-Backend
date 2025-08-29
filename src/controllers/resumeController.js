@@ -1,20 +1,9 @@
+require('dotenv').config();
 const cloudinary = require("cloudinary").v2;
 const Resume = require("../models/Resume");
 const pdfParse = require("pdf-parse");
 const { Readable } = require("stream");
 const { analyzeResume } = require("../utils/gemini");
-
-
-async function testCloudinary() {
-  try {
-    const res = await cloudinary.api.ping();
-    console.log("Cloudinary OK ✅", res);
-  } catch (err) {
-    console.error("Cloudinary error ❌", err);
-  }
-}
-
-
 
 
 function bufferToStream(buffer) {
@@ -35,7 +24,7 @@ async function uploadResume(req, res) {
     //Upload to Cloudinary directly from buffer
     const result = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder: "resume", resource_type: "auto" },
+        {resource_type: "auto" },
         (err, uploaded) => {
           if (err) reject(err);
           else resolve(uploaded);
